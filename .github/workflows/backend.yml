@@ -1,0 +1,65 @@
+name: Backend CI
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main, develop]
+
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    services:
+      mysql:
+        image: mysql:8.0
+
+        env:
+          MYSQL_ROOT_PASSWORD: rootpassword
+          MYSQL_DATABASE: dalia
+        
+        ports:
+          3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=5
+
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Python Setup
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+      
+      - name: Install Dependencies
+        run: |
+          cd Backend
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install pytest pytest-cov httpx
+
+      - name: Confirm MySQL Connection
+        run: |
+          for i in {1..10}; do 
+            if mysql -h127.0.0.1 -P3306 -uroot -prootpassword -e "SELECT 1" >/dev/null 2>&1; then
+                echo "MySQL Connection Established."
+                break
+            fi
+            echo "Connecting to MySQL... $i"
+            sleep 3
+          done
+
+      - name: Run Tests
+        env:
+          DATABASE_URL: mysql+pymysql://root@localhost:3306/dalia
+          SECRET_KEY: amber
+          TEST_MODE: true
+        run: |
+          cd backend
+          pytest tests/v
