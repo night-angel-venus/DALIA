@@ -62,4 +62,4 @@ jobs:
           TEST_MODE: true
         run: |
           cd backend
-          pytest tests/v
+          pytest tests/ -v
