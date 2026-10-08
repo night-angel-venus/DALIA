@@ -3,8 +3,13 @@
 3. Create the API itself
 
 
+
+ON MAIN BRANCH
 # todo: 1. create models for user and dtr (maybe just in one file?)
 # todo: 2. create schemas for user and dtr (maybe just in one file?)
 # todo: 3. Connect Database and Migrate
+
+
 # todo: 4. create develop branch AFTER Database has been connected
 
+ 

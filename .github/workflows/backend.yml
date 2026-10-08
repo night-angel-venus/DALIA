@@ -6,7 +6,6 @@ on:
   pull_request:
     branches: [main, develop]
 
-
 jobs:
   test:
     runs-on: ubuntu-latest
@@ -14,29 +13,31 @@ jobs:
     services:
       mysql:
         image: mysql:8.0
-
         env:
           MYSQL_ROOT_PASSWORD: rootpassword
           MYSQL_DATABASE: dalia
-        
         ports:
-          - 3306:3306
+          - "3306:3306"
         options: >-
           --health-cmd="mysqladmin ping"
           --health-interval=10s
           --health-timeout=5s
           --health-retries=5
 
-    
+    env:
+      DATABASE_URL: mysql+pymysql://root:rootpassword@127.0.0.1:3306/dalia
+      SECRET_KEY: amber
+      TEST_MODE: "true"
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
       - name: Python Setup
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
           python-version: '3.11'
-      
+
       - name: Install Dependencies
         run: |
           cd backend
@@ -44,22 +45,12 @@ jobs:
           pip install -r requirements.txt
           pip install pytest pytest-cov httpx
 
-      - name: Confirm MySQL Connection
-        run: |
-          for i in {1..10}; do 
-            if mysql -h127.0.0.1 -P3306 -uroot -prootpassword -e "SELECT 1" >/dev/null 2>&1; then
-                echo "MySQL Connection Established."
-                break
-            fi
-            echo "Connecting to MySQL... $i"
-            sleep 3
-          done
-
-      - name: Run Tests
-        env:
-          DATABASE_URL: mysql+pymysql://root@localhost:3306/dalia
-          SECRET_KEY: amber
-          TEST_MODE: true
+      - name: Run Migrations
         run: |
           cd backend
-          pytest tests/ -v
+          alembic upgrade head
+
+      - name: Run Tests
+        run: |
+          cd backend
+          pytest app/tests/ -v --cov=app
