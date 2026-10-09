@@ -10,8 +10,7 @@ class UserRoleEnum(str, Enum):
 class ShiftTypeEnum(str, Enum):
     FULL_DAY = "Full Day (8 Hours)"
     HALF_DAY = "Half Day (4 Hours)"
-
-
+    
 class CreateUser(BaseModel):
     username:str
     email: EmailStr

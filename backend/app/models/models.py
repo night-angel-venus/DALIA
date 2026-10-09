@@ -26,7 +26,7 @@ class User(Base):
     password = Column(String(255), nullable=False)
     role = Column(Enum(UserRoleEnum), nullable=False)
 
-    rel_dtr = relationship("DTR", back_populates="user", cascade="all, delete-orphan")
+    rel_dtr = relationship("DTR", back_populates="rel_user", cascade="all, delete-orphan")
 
 
 
@@ -35,7 +35,7 @@ class DTR(Base):
 
     id = Column(Integer, primary_key=True, index=True)
     date = Column(Date, default=func.now())
-    user_id = Column(Integer)
+    user_id = Column(Integer, ForeignKey("users.id"))
     shift_type = Column(Enum(ShiftTypeEnum), default=ShiftTypeEnum.FULL_DAY)
     time_in = Column(DateTime, default=func.now())
     estimated_time_out = Column(DateTime)
