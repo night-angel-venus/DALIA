@@ -15,15 +15,17 @@ from app.auth.auth import (
 
 app = FastAPI(title="DALIA", version="0.1.0")
 
+router = APIRouter(prefix="/v1")
 
-@app.get("/health", status_code=status.HTTP_200_OK)
+
+@router.get("/health", status_code=status.HTTP_200_OK)
 def get_health():
     return {
         "status":"healthy",
         "current":"App is running" 
     }
 
-@app.post("/register", response_model=UserResponse)
+@router.post("/register", response_model=UserResponse)
 def register(request: Request, user: CreateUser, db: Session = Depends(get_db)):
 
     existing_user = db.query(User).filter(User.email == user.email).first()
@@ -51,7 +53,7 @@ def register(request: Request, user: CreateUser, db: Session = Depends(get_db)):
 
     return new_user
 
-@app.post("/login", response_model=Token)
+@router.post("/login", response_model=Token)
 def login(
     request: Request,
     form_data: OAuth2PasswordRequestForm = Depends(),
@@ -84,6 +86,9 @@ def login(
         }
 
 
-@app.get("/me", response_model=UserResponse)
+@router.get("/me", response_model=UserResponse)
 def me(current:User = Depends(get_current_user)):
     return current
+
+
+app.include_router(router)
