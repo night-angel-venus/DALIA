@@ -55,4 +55,12 @@ class DTRResponse(BaseModel):
 
     class Config:
         from_attributes = True
+
+
+class SyncEvent(BaseModel):
+    user_event_id:str
+    user_id: int
+    event_type: str
+    payload: dict
+    created_at: datetime
     
