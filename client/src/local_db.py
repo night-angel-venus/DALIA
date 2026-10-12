@@ -96,3 +96,8 @@ def count_by_status(status:str) -> int:
             (status,)
         ).fetchone()
     return row["n"]
+
+
+def clear_all() -> None:
+    with _connect() as conn:
+        conn.execute("DELETE FROM local_events")
