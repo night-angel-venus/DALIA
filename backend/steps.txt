@@ -1,5 +1,12 @@
-1. Create Models, Schemas, DB Connection
-2. Set up AUTH
-3. Create the API itself
+NEXT TO DO:
 
- 
+1. Start creating the API for TIME IN ONLY
+2. Time in logic:
+    "/v1/time-in"
+    get current system clock
+    save to sqlite first
+    try to reach API
+    if reachable:
+        dtr = DTR(user_id=sdasdf)
+
+

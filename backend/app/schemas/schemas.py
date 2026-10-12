@@ -2,15 +2,8 @@ from pydantic import BaseModel, EmailStr
 from typing import Optional
 from enum import Enum
 from datetime import date, datetime
+from app.enums import UserRoleEnum, ShiftTypeEnum
 
-class UserRoleEnum(str, Enum):
-    ADMIN = "Admin"
-    USER = "User"
-
-class ShiftTypeEnum(str, Enum):
-    FULL_DAY = "Full Day (8 Hours)"
-    HALF_DAY = "Half Day (4 Hours)"
-    
 class CreateUser(BaseModel):
     username:str
     email: EmailStr
@@ -31,12 +24,22 @@ class Token(BaseModel):
     token_type: str
     user: UserResponse
 
+    class Config:
+        from_attributes = True
+
+    
+
 class TokenData(BaseModel):
     email: Optional[str] = None
     role: Optional[str] = None
 
 class CreateDTR(BaseModel):
     user_id: int
+    shift_type: ShiftTypeEnum
+
+
+
+class TimeInRequest(BaseModel):
     shift_type: ShiftTypeEnum
 
 
@@ -49,6 +52,15 @@ class DTRResponse(BaseModel):
     estimated_time_out: Optional[datetime] = None
     time_out: Optional[datetime] = None
 
+
     class Config:
         from_attributes = True
+
+
+class SyncEvent(BaseModel):
+    user_event_id:str
+    user_id: int
+    event_type: str
+    payload: dict
+    created_at: datetime
     

@@ -1,4 +1,4 @@
-from app.schemas.schemas import TokenData, Token, UserResponse, CreateUser, DTRResponse, CreateDTR
+from app.schemas.schemas import TokenData, Token, UserResponse, CreateUser, DTRResponse, CreateDTR, TimeInRequest, SyncEvent
 
 __all__ = [
     "TokenData",
@@ -6,5 +6,7 @@ __all__ = [
     "UserResponse",
     "CreateUser",
     "DTRResponse",
-    "CreateDTR"
+    "CreateDTR",
+    "TimeInRequest",
+    "SyncEvent"
 ]
