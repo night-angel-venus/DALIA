@@ -1,5 +1,6 @@
 import { useState } from "react"
 import Login from "./pages/Login";
+import Home from "./pages/Home";
 
 function App() {
 
@@ -11,7 +12,7 @@ function App() {
 
   return (
     <>
-      <p>Hello, {user.email}</p>
+      <Home user={user}/>
     </>
   )
 }

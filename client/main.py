@@ -30,7 +30,7 @@ def main():
 
     webview.create_window("DALIA", url, js_api=api, width=700, height=1000)
 
-    webview.start()
+    webview.start(debug=True)
 
 if __name__ == "__main__":
     main()

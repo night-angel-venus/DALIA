@@ -14,11 +14,11 @@ export const bridge = {
     },
 
     async time_in(shiftType: String) {
-        return window.pywebview!.api.time_int(shiftType);
+        return window.pywebview!.api.time_in(shiftType);
     },
 
     async time_out() {
-        return window.pywebview!.api.time_int();
+        return window.pywebview!.api.time_out();
     },
 
     async getStatus() {

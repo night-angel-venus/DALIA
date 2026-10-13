@@ -39,6 +39,12 @@ class API:
             }
         )
 
+        return {
+            "ok":True,
+            "user_event_id": user_event_id,
+            "time_in":now.isoformat()
+        }
+
     def time_out(self) -> dict:
         if not self.current_user:
             return {"ok":False, "error": "Not logged in"}
