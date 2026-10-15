@@ -34,6 +34,25 @@ class HttpClient:
             "user": body.get("user"),
         }
 
+    def get_dtr_today(self, token:str):
+
+        try:
+            request = requests.get(
+                f"{self.base_url}/dtr/today",
+                headers={"Authorization":f"Bearer {token}"},
+                timeout=self.timeout
+                )
+
+        except requests.RequestException as e:
+            return {"ok": False, "error": str(e)}
+
+        body = request.json()
+                
+        if request.status_code == 200:
+            return {"ok": True, "dtr": request.json()}
+        
+        return {"ok": False, "error": f"HTTP {request.status_code}: {request.text}"}
+
     def sync_event(self, token:str, event: dict):
         payload = event["payload"]
 

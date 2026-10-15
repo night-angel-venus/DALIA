@@ -9,7 +9,7 @@ declare global {
 export const bridge = {
     ready: () => typeof window.pywebview !== "undefined",
 
-    async login(email: string, password: string) {
+    async login(email: String, password: String) {
         return window.pywebview!.api.login(email, password);
     },
 
@@ -24,6 +24,10 @@ export const bridge = {
     async getStatus() {
         return window.pywebview!.api.get_status();
     },
+
+    async getDtrToday() {
+        return window.pywebview!.api.get_today();
+    }
 
 
 

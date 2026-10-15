@@ -26,7 +26,7 @@ def main():
 
     threading.Thread(target=worker.run, daemon=True).start()
 
-    url = "http://localhost:5173" if dev_mode else "frontend/dist/index.html"
+    url = "http://127.0.0.1:5173" if dev_mode else "frontend/dist/index.html"
 
     webview.create_window("DALIA", url, js_api=api, width=700, height=1000)
 

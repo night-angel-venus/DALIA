@@ -132,7 +132,7 @@ def time_out(
     return dtr_time_out
 
 
-@router.get("/dtr/today", response_model=DTRResponse)
+@router.get("/dtr/today", response_model=DTRResponse | None)
 def get_dtr_today(current_user:User=Depends(get_current_user), db:Session=Depends(get_db)):
 
     dtr_today = db.query(DTR).filter(
@@ -140,12 +140,7 @@ def get_dtr_today(current_user:User=Depends(get_current_user), db:Session=Depend
         DTR.date == date.today()
     ).first()
 
-    if dtr_today is None:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail="DTR not found"
-        )
-
+    
     return dtr_today
 
 @router.get("/dtr/history", response_model=list[DTRResponse])

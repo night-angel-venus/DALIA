@@ -63,6 +63,16 @@ class API:
             "time_out":now.isoformat()
         }
 
+    def get_today(self) -> dict:
+        if not self.token:
+            return {
+                "ok":False,
+                "error":"Not Logged in"
+            }
+        return self.http.get_dtr_today(self.token)
+       
+        
+
     def get_status(self) -> dict:
         return {
             "pending": local_db.count_by_status("PENDING"),
