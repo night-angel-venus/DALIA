@@ -20,6 +20,12 @@ def main():
 
     api = API(http=http)
 
+    if api.restore_session():
+        print("[SYSTEM] Saved session restored.")
+    else:
+        print("[SYSTEM] No Saved Session, Please Log In")
+
+
     worker = SyncWorker(http=http, get_token=lambda: api.token)
 
     api.worker = worker

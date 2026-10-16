@@ -1,5 +1,7 @@
 import { useState, useEffect } from "react";
 import { bridge } from "../lib/bridge";
+import { Button } from "../components/ui/button";
+
 
 function Home({ user }: { user: any }) {
   const [shift, setShift] = useState("Full Day (8 Hours)");
@@ -47,6 +49,11 @@ function Home({ user }: { user: any }) {
     }
   }
 
+  async function handleLogout() {
+    await bridge.logout();
+    window.location.reload();
+  }
+
   const timeInDisplay = todayDtr?.time_in
     ? new Date(todayDtr.time_in).toLocaleTimeString()
     : "";
@@ -85,6 +92,10 @@ function Home({ user }: { user: any }) {
           disabled
         />
       </div>
+
+      <Button onClick={handleLogout}>
+        Log Out
+      </Button>
 
       {lastAction && <p>{lastAction}</p>}
     </main>

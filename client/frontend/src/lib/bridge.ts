@@ -27,7 +27,17 @@ export const bridge = {
 
     async getDtrToday() {
         return window.pywebview!.api.get_today();
-    }
+    },
+
+    async getCurrentUser() {
+        return window.pywebview!.api.get_current_user();
+    },
+    async logout() {
+        return window.pywebview!.api.logout();
+    },
+    async isLoggedIn() {
+        return window.pywebview!.api.is_logged_in();
+    },
 
 
 

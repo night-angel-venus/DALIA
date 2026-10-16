@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from src import local_db
+from src import local_db, session_store
 
 class API:
     def __init__(self, http, worker=None):
@@ -19,7 +19,32 @@ class API:
 
         self.current_user = result["user"]
 
+        session_store.save_session(self.token, self.current_user)
+
         return {"ok":True, "user": result["user"]} 
+
+
+    def logout(self) -> dict:
+        self.token = None
+        self.current_user = None
+        session_store.clear_session()
+        return {"ok":True}
+
+    def get_current_user(self) -> dict | None:
+        return self.current_user
+
+    def restore_session(self) -> bool:
+        session = session_store.load_session()
+
+        if not session:
+            return False
+
+        self.token = session.get("token")
+        self.current_user = session.get("user")
+
+        return bool(self.token and self.current_user)
+
+    
 
     def is_logged_in(self) -> bool:
         return self.token is not None
