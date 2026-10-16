@@ -23,8 +23,10 @@ from slowapi.errors import RateLimitExceeded
 
 from starlette.middleware.base import BaseHTTPMiddleware
 
+import os
 
-limiter = Limiter(key_func=get_remote_address)
+
+limiter = Limiter(key_func=get_remote_address, enabled=os.getenv("TEST_MODE") != "true")
 
 app = FastAPI(title="DALIA", version="0.1.0")
 router = APIRouter(prefix="/v1")
