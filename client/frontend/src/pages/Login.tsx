@@ -2,6 +2,8 @@ import React from 'react'
 import { useState, useEffect } from 'react'
 import { bridge } from '../lib/bridge';
 
+import { Button } from '../components/ui/button';
+
 function Login({onSuccess}:{onSuccess:  (user:any) => void}) {
 
     const [email, setEmail] = useState("");
@@ -52,10 +54,10 @@ function Login({onSuccess}:{onSuccess:  (user:any) => void}) {
             onChange={(e) => setPassword(e.target.value)}/>
             
             {error && <p>{error}</p>}
-            
-            <button type="submit">
+        
+            <Button type="submit">
                 {ready ? "Log in":"Logging you in..."}
-            </button>
+            </Button>
 
 
         </form>      
