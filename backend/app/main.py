@@ -17,10 +17,32 @@ from app.services.dtr import user_time_in, user_time_out
 
 from datetime import datetime, date
 
+from slowapi import Limiter, _rate_limit_exceeded_handler
+from slowapi.util import get_remote_address
+from slowapi.errors import RateLimitExceeded
+
+from starlette.middleware.base import BaseHTTPMiddleware
+
+
+limiter = Limiter(key_func=get_remote_address)
 
 app = FastAPI(title="DALIA", version="0.1.0")
-
 router = APIRouter(prefix="/v1")
+
+app.state.limiter = limiter
+app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
+
+
+class SecurityHeader(BaseHTTPMiddleware):
+    async def dispatch(self, request, call_next):
+        response = await call_next(request)
+        response.headers["X-Content-Type-Options"] = "nosniff"
+        response.headers["X-Frame-Options"] = "DENY"
+        response.headers["Referrer-Policy"] = "no-referrer"
+        response.headers["Permissions-Policy"] = "geolocation=(), microphone=(), camera=()"
+        return response
+
+app.add_middleware(SecurityHeader)
 
 
 @router.get("/health", status_code=status.HTTP_200_OK)
@@ -31,6 +53,7 @@ def get_health():
     }
 
 @router.post("/register", response_model=UserResponse)
+@limiter.limit("3/hour")
 def register(request: Request, user: CreateUser, db: Session = Depends(get_db)):
 
     existing_user = db.query(User).filter(User.email == user.email).first()
@@ -59,6 +82,7 @@ def register(request: Request, user: CreateUser, db: Session = Depends(get_db)):
     return new_user
 
 @router.post("/login", response_model=Token)
+@limiter.limit("10/minute")
 def login(
     request: Request,
     form_data: OAuth2PasswordRequestForm = Depends(),
@@ -99,7 +123,7 @@ def me(current:User = Depends(get_current_user)):
 
 
 @router.post("/dtr/time-in", response_model=DTRResponse, status_code=status.HTTP_201_CREATED)
-def time_in(
+def time_in(                                                                                                            
     payload:TimeInRequest, 
     db: Session = Depends(get_db), 
     current_user: User = Depends(get_current_user)):
@@ -165,7 +189,9 @@ def get_dtr_all(
 # ENDPOINT FOR SYNC
 
 @router.post("/dtr/sync")
+@limiter.limit("60/minute")
 def sync_dtr(
+    request:Request,
     event: SyncEvent,
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db)
