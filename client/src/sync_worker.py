@@ -2,6 +2,8 @@ import threading
 
 from src import local_db
 
+# This file is responsible for syncing the sqlite data to the DB
+
 class SyncWorker:
     def __init__(self, http, get_token, interval_seconds: int = 30):
         self.http=http

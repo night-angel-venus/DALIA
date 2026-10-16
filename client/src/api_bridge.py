@@ -2,6 +2,12 @@ from datetime import datetime
 
 from src import local_db, session_store
 
+
+# This file is the first layer the data goes through after being sent from the Frontend.
+# It acts as the literal bridge going towards the API.
+# It receives all traffic and routes them to where they should be.
+
+# This file is the equivalent of making a file in react called api.ts and bridging the Frontend to the Backend
 class API:
     def __init__(self, http, worker=None):
         self.http = http

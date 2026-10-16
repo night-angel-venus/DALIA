@@ -2,12 +2,18 @@ import json
 import requests
 
 
+# This Client contains functions that simply
+# Access the endpoints and pass data onto them
+
 class HttpClient:
     def __init__(self, base_url:str, timeout:int = 10):
         self.base_url = base_url.rstrip("/")
         self.timeout = timeout
 
+    # Access to Login Endpoint (takes in 2 params)
     def login(self, email:str, password:str):
+
+        #Actual Logic
         try:
             request = requests.post(
                 f"{self.base_url}/login",
@@ -15,6 +21,7 @@ class HttpClient:
                 timeout=self.timeout
             )
 
+        # Error Handlers
         except requests.RequestException as e:
             return {"ok": False, "error": str(e)}
 
@@ -26,6 +33,7 @@ class HttpClient:
             return {"ok": False, "error":detail}
 
 
+        # Parse data into JSON
         body = request.json()
         
         return {
@@ -34,31 +42,42 @@ class HttpClient:
             "user": body.get("user"),
         }
 
+    # Gets the DTR of the day (1 param)
     def get_dtr_today(self, token:str):
 
+        # Actual Logic
         try:
             request = requests.get(
                 f"{self.base_url}/dtr/today",
+
+                # headers contains the token
                 headers={"Authorization":f"Bearer {token}"},
                 timeout=self.timeout
                 )
 
+
+        # Error Handler   
         except requests.RequestException as e:
             return {"ok": False, "error": str(e)}
 
-        body = request.json()
                 
         if request.status_code == 200:
             return {"ok": True, "dtr": request.json()}
         
         return {"ok": False, "error": f"HTTP {request.status_code}: {request.text}"}
 
+    # Acess to Sync Endpoint (2 params)
     def sync_event(self, token:str, event: dict):
+
+        # payload comes from event, payload is essentially the DTR data
         payload = event["payload"]
 
+        # If sqlite data says payload is a string,
+        # parse it into JSON
         if isinstance(payload, str):
             payload = json.loads(payload)
 
+        # Actual Sync Logic
         try:
             request =  requests.post(
                 f"{self.base_url}/dtr/sync",
@@ -72,6 +91,8 @@ class HttpClient:
                 headers={"Authorization":f"Bearer {token}"},
                 timeout=self.timeout
             )
+
+        # Error Handler
         except requests.RequestException as e:
             return {"ok": False, "error": str(e)}
 
