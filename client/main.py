@@ -34,7 +34,7 @@ def main():
 
     url = "http://127.0.0.1:5173" if dev_mode else "frontend/dist/index.html"
 
-    webview.create_window("DALIA", url, js_api=api, width=700, height=1000)
+    webview.create_window("DALIA", url, js_api=api, width=400, height=600, resizable=False)
 
     webview.start(debug=True)
 
