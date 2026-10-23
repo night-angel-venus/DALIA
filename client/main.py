@@ -2,6 +2,8 @@ import threading
 
 import webview
 
+import os
+import sys
 
 from src import local_db
 from src.api_bridge import API
@@ -10,8 +12,17 @@ from src.sync_worker import SyncWorker
 
 
 api_url = "http://127.0.0.1:8000/v1"
-dev_mode = True
+dev_mode = False
 
+
+def resource_path(relative_path):
+    """ Get absolute path to resource, works for dev and for PyInstaller """
+    try:
+        # PyInstaller creates a temp folder and stores path in _MEIPASS
+        base_path = sys._MEIPASS
+    except Exception:
+        base_path = os.path.abspath(".")
+    return os.path.join(base_path, relative_path)
 
 def main():
     local_db.init_db()
@@ -32,11 +43,17 @@ def main():
 
     threading.Thread(target=worker.run, daemon=True).start()
 
+    if dev_mode:
+        url = "http://127.0.0.1:5173"
+    else:
+        url = resource_path(os.path.join("frontend", "dist", "index.html"))
+
+
     url = "http://127.0.0.1:5173" if dev_mode else "frontend/dist/index.html"
 
     webview.create_window("DALIA", url, js_api=api, width=400, height=600, resizable=False)
 
-    webview.start(debug=True)
+    webview.start(debug=dev_mode)
 
 if __name__ == "__main__":
     main()
