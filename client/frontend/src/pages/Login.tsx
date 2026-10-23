@@ -12,6 +12,8 @@ import {
 
 import { Input } from "../components/ui/input"
 
+import daliaLogo from "../assets/dalia_icon.svg";
+
 
 function Login({ onSuccess }: { onSuccess: (user: any) => void }) {
 
@@ -50,7 +52,7 @@ function Login({ onSuccess }: { onSuccess: (user: any) => void }) {
         <main className='p-14 w-screen h-screen border flex flex-col bg-[#9a0002]'>
 
             <div>
-                <img src='../public/dalia_icon.svg' className='size-30 mx-auto mb-10 ' />
+                <img src={daliaLogo} className='size-30 mx-auto mb-10 ' />
             </div>
 
             <form onSubmit={handleSubmit} className=''>
@@ -64,7 +66,7 @@ function Login({ onSuccess }: { onSuccess: (user: any) => void }) {
                                 autoComplete="off"
                                 type="email"
                                 value={email}
-                                placeholder='eann@bizsolvasia.com'
+                                placeholder='dalia@bizsolvasia.com'
                                 onChange={(e) => setEmail(e.target.value)}
                                 className='rounded-sm bg-[#efe6dd] text-[14px]'
                             />
@@ -76,7 +78,7 @@ function Login({ onSuccess }: { onSuccess: (user: any) => void }) {
                                 autoComplete="off"
                                 type="password"
                                 value={password}
-                                placeholder='Enter Password'
+                                placeholder='********'
                                 onChange={(e) => setPassword(e.target.value)}
                                 className='rounded-sm bg-[#efe6dd] text-[14px]'
                             />

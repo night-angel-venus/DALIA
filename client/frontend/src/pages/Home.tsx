@@ -11,8 +11,7 @@ import { Label } from "../components/ui/label";
 
 
 function Home({ user }: { user: any }) {
-  const [shift, setShift] = useState("Full Day (8 Hours)");
-  const [lastAction, setLastAction] = useState("");
+  const [shift, setShift] = useState("");
   const [todayDtr, setTodayDtr] = useState<any>(null);
   const [currentTime, setCurrentTime] = useState('');
 
@@ -47,14 +46,11 @@ function Home({ user }: { user: any }) {
     console.log("time in result:", result);
 
     if (result.ok) {
-      const time = new Date(result.time_in).toLocaleTimeString();
-      setLastAction(time);
       setTodayDtr((prev: any) => ({
         ...(prev ?? {}),
         time_in: result.time_in,
       }));
     } else {
-      setLastAction(`Error: ${result.error}`);
     }
   }
 
@@ -62,14 +58,11 @@ function Home({ user }: { user: any }) {
     const result = await bridge.time_out();
 
     if (result.ok) {
-      const time = new Date(result.time_out).toLocaleDateString();
-      setLastAction(`Time out: ${time}`);
       setTodayDtr((prev: any) => ({
         ...(prev ?? {}),
         time_out: result.time_out,
       }));
     } else {
-      setLastAction(`Error: ${result.error}`);
     }
   }
 
@@ -80,13 +73,13 @@ function Home({ user }: { user: any }) {
 
   const timeInDisplay = todayDtr?.time_in
     ? new Date(todayDtr.time_in).toLocaleTimeString('en-US', {
-      hour: '2-digit', minute: '2-digit'
+      hour: '2-digit', minute: '2-digit', hour12:false
     })
     : "";
 
   const timeOutDisplay = todayDtr?.time_out
     ? new Date(todayDtr.time_out).toLocaleTimeString('en-US', {
-      hour: '2-digit', minute: '2-digit'
+      hour: '2-digit', minute: '2-digit', hour12:false
     })
     : "";
 
@@ -126,7 +119,7 @@ function Home({ user }: { user: any }) {
 
       <Card className="bg-[#efe6dd] p-2 py-6 h-full flex flex-col gap-2">
         <CardHeader>
-          <CardTitle>Daily Attendance Log</CardTitle>
+          <CardTitle className="text-[#9a0002]">Daily Attendance Log</CardTitle>
 
           <div className="grid grid-cols-2 gap-3">
             <Button onClick={handleTimeIn} className={`h-5 py-3 rounded-sm w-full text-[10px] cursor-pointer text-[#9a0002] bg-[#e5b85c] ${todayDtr?.time_in ? 'bg-[#4f9d69]' : ''}`} disabled={!!todayDtr?.time_in}>Time in</Button>
@@ -163,14 +156,9 @@ function Home({ user }: { user: any }) {
       </Card>
 
 
-
-
       <div>
       </div>
 
-
-
-      {lastAction && <p>{lastAction}</p>}
     </main>
   );
 }

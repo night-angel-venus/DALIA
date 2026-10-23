@@ -11,7 +11,7 @@ from src.http_client import HttpClient
 from src.sync_worker import SyncWorker
 
 
-api_url = "http://127.0.0.1:8000/v1"
+api_url = "http://192.168.1.100:8000/v1"
 dev_mode = False
 
 
@@ -53,7 +53,7 @@ def main():
 
     webview.create_window("DALIA", url, js_api=api, width=400, height=600, resizable=False)
 
-    webview.start(debug=dev_mode)
+    webview.start(debug=dev_mode, private_mode=True)
 
 if __name__ == "__main__":
     main()
