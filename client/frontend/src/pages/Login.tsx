@@ -1,21 +1,13 @@
 import React from 'react'
 import { useState, useEffect } from 'react'
 import { bridge } from '../lib/bridge';
-
 import { Button } from '../components/ui/button';
-import LoginForm from './components/LoginForm';
 
 import {
     Field,
-    FieldContent,
-    FieldDescription,
-    FieldError,
     FieldGroup,
     FieldLabel,
-    FieldLegend,
-    FieldSeparator,
     FieldSet,
-    FieldTitle,
 } from "../components/ui/field"
 
 import { Input } from "../components/ui/input"
@@ -25,7 +17,7 @@ function Login({ onSuccess }: { onSuccess: (user: any) => void }) {
 
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    const [error, setError] = useState("");
+    // const [error, setError] = useState("");
     const [ready, setReady] = useState(false);
 
 
@@ -42,14 +34,14 @@ function Login({ onSuccess }: { onSuccess: (user: any) => void }) {
 
     async function handleSubmit(e: React.FormEvent) {
         e.preventDefault();
-        setError("")
+        // setError("")
 
         const result = await bridge.login(email, password);
 
         if (result.ok) {
             onSuccess(result.user);
         } else {
-            setError(result.error ?? "Login failed");
+            // setError(result.error ?? "Login failed");
         }
     }
 

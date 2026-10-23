@@ -3,10 +3,7 @@ import { bridge } from "../lib/bridge";
 import { Button } from "../components/ui/button";
 import {
   Card,
-  CardAction,
   CardContent,
-  CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from "../components/ui/card"
@@ -19,7 +16,6 @@ function Home({ user }: { user: any }) {
   const [todayDtr, setTodayDtr] = useState<any>(null);
   const [currentTime, setCurrentTime] = useState('');
 
-  const [isFullDay, setIsFullDay] = useState(false);
 
   useEffect(() => {
     const updateTime = () => {
@@ -153,6 +149,7 @@ function Home({ user }: { user: any }) {
 
             <div className="flex flex-row justify-between">
               <div className="w-full text-[#9a0002] text-[12px] font-bold">Time in: {timeInDisplay}</div>
+              <div className="w-full text-[#9a0002] text-[12px] font-bold">Time out: {timeOutDisplay}</div>
             </div>
 
           </div>
